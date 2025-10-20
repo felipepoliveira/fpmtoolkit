@@ -3,6 +3,7 @@ package io.felipepoliveira.fpmtoolkit.features.users
 import io.felipepoliveira.fpmtoolkit.beans.context.ContextualBeans
 import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.i18n.I18n
 import io.felipepoliveira.fpmtoolkit.mail.MailContentType
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipient
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipientType
@@ -34,7 +35,7 @@ class UserMail @Autowired constructor(
 
         // Send the mail
         mailSenderProvider.sendMailAsync(
-            "FPM Toolkit - Recuperação de Senha",
+            I18n.getMessage(user.preferredRegion, I18n.MessageKeys.MAIL_PASSWORD_RECOVERY_TITLE),
             mailContent.toString().toByteArray(),
             MailContentType.HTML,
             MailRecipient(user.primaryEmail, MailRecipientType.TO)
@@ -53,7 +54,7 @@ class UserMail @Autowired constructor(
 
         // Send the mail
         mailSenderProvider.sendMailAsync(
-            "FPM Toolkit - Alteração de E-mail Primário",
+            I18n.getMessage(user.preferredRegion, I18n.MessageKeys.MAIL_PRIMARY_EMAIL_CHANGE_TITLE),
             mailContent.toString().toByteArray(),
             MailContentType.HTML,
             MailRecipient(newPrimaryEmail, MailRecipientType.TO)
@@ -73,7 +74,7 @@ class UserMail @Autowired constructor(
 
         // Send the mail
         mailSenderProvider.sendMailAsync(
-            "FPM Toolkit - Confirmação de E-mail Primário",
+            I18n.getMessage(user.preferredRegion, I18n.MessageKeys.MAIL_PRIMARY_EMAIL_CONFIRMATION_TITLE),
             mailContent.toString().toByteArray(),
             MailContentType.HTML,
             MailRecipient(user.primaryEmail, MailRecipientType.TO)
@@ -95,7 +96,7 @@ class UserMail @Autowired constructor(
 
         // Send the mail
         mailSenderProvider.sendMailAsync(
-            "Saudações do FPM Toolkit",
+            I18n.getMessage(user.preferredRegion, I18n.MessageKeys.MAIL_WELCOME),
             mailContent.toString().toByteArray(),
             MailContentType.HTML,
             MailRecipient(user.primaryEmail, MailRecipientType.TO)

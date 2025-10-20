@@ -6,6 +6,7 @@ import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.users.UserModel
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.i18n.I18n
 import io.felipepoliveira.fpmtoolkit.mail.MailContentType
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipient
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipientType
@@ -35,9 +36,13 @@ class OrganizationMemberInviteMail @Autowired constructor(
         mailContent.add("organization.name", sender.presentationName)
         mailContent.add("invitationUrl", invitationUrl)
 
-        // Send the mail
+        // Process i18n mail title
+        val organizationInviteTitle = WildcardString(
+            I18n.getMessage(mailLanguage, I18n.MessageKeys.MAIL_ORGANIZATION_INVITE_TITLE)
+        ).add("organization.presentationName", sender.presentationName)
+            .toString()
         mailSenderProvider.sendMailAsync(
-            "FPM Toolkit - Convite de Organização - ${sender.presentationName}",
+            organizationInviteTitle,
             mailContent.toString().toByteArray(),
             MailContentType.HTML,
             MailRecipient(recipientEmail, MailRecipientType.TO)

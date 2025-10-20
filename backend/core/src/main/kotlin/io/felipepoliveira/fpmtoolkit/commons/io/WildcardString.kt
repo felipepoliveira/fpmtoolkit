@@ -26,6 +26,12 @@ class WildcardString(
     private val wildcardsAndValues: MutableMap<String, String?> = mutableMapOf()
 
     /**
+     * Return all processed wildcards from the input stream
+     */
+    val wildcards: Set<String>
+        get() = wildcardsAndValues.keys
+
+    /**
      * Load the text of the wildcard string
      */
     init {

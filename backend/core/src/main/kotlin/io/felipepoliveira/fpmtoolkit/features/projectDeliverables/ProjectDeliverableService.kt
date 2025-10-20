@@ -118,6 +118,7 @@ class ProjectDeliverableService @Autowired constructor (
         }
 
         // Create the new deliverable
+
         val deliverable = ProjectDeliverableModel(
             id = null,
             uuid = UUID.randomUUID().toString(),
