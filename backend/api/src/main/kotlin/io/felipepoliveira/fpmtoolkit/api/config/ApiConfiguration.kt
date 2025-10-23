@@ -57,9 +57,7 @@ class ApiConfiguration {
             .securityMatcher(endpointsMatcher)
             .authorizeHttpRequests { it.anyRequest().authenticated() }
             .csrf { it.ignoringRequestMatchers(endpointsMatcher) }
-            .with(authorizationServerConfigurer, {
-
-            })
+            .with(authorizationServerConfigurer) {}
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
 
         return http.build()
