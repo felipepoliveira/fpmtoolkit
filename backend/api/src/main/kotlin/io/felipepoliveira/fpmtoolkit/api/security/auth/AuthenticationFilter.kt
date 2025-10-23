@@ -19,6 +19,7 @@ class AuthenticationFilter @Autowired constructor(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+
         // Get the authentication token from the user request
         val authenticationToken = getAuthenticationToken(request)
         if (authenticationToken == null) {
