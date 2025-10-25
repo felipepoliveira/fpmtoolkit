@@ -67,4 +67,4 @@ class UserModel(
     @field:Column(name = "uuid", length = 40, nullable = false)
     @field:NotNull
     val uuid: String,
-)
+) : UserMode

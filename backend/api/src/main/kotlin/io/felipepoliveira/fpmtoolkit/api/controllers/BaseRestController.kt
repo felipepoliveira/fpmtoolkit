@@ -21,6 +21,23 @@ abstract class BaseRestController {
     fun ok(callback: ResponseBuilderCallbackWithBody) = send(200, callback)
 
     /**
+     * Send a redirect request (302) to the given location
+     */
+    fun redirect(location: String, callback: EmptyResponseBuilderCallback) = send(302) { reqBuilder ->
+        reqBuilder.header("Location", location)
+        callback(reqBuilder)
+    }
+
+    /**
+     * Send a redirect request (302) to the given location
+     */
+    fun redirect(location: String): ResponseEntity<Any> {
+        return send(302) { reqBuilder ->
+            reqBuilder.header("Location", location)
+        }
+    }
+
+    /**
      * Functional method that increase the syntax quality for @RestController endpoints.
      */
     fun send(responseCode: Int, callback: OptionalResponseBuilderCallback): ResponseEntity<Any> {
