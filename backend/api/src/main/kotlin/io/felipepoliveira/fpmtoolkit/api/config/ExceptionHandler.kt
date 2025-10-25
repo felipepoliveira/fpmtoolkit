@@ -17,7 +17,6 @@ class ExceptionHandler {
 
     @ExceptionHandler(exception = [AccessDeniedException::class])
     fun accessDenied(exception: AccessDeniedException): ResponseEntity<Any> {
-        exception.printStackTrace()
         return ResponseEntity
             .status(403)
             .header("X-Reason", "You do not have the required role to use this service")
@@ -33,7 +32,6 @@ class ExceptionHandler {
         MissingRequestValueException::class,
     ])
     fun badRequest(exception: Exception): ResponseEntity<Any> {
-        exception.printStackTrace()
         return ResponseEntity
             .badRequest()
             .header("X-Reason", "You sent a request that could not be decoded by the server. Check the request parameters on the documentation")
@@ -63,7 +61,6 @@ class ExceptionHandler {
      */
     @ExceptionHandler(exception = [HttpRequestMethodNotSupportedException::class])
     fun methodNotAllowedException(exception: Exception): ResponseEntity<Any> {
-        exception.printStackTrace()
         return ResponseEntity
             .status(405)
             .build()
@@ -71,7 +68,6 @@ class ExceptionHandler {
 
     @ExceptionHandler(exception = [NoResourceFoundException::class])
     fun noResourceFoundException(exception: NoResourceFoundException): ResponseEntity<Any> {
-        exception.printStackTrace()
         return ResponseEntity
             .notFound()
             .header("X-Reason", "The endpoint ${exception.resourcePath} did not match any mapped route in the server")
