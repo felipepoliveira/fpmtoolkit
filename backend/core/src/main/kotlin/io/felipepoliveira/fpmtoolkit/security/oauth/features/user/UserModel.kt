@@ -1,4 +1,4 @@
-package io.felipepoliveira.fpmtoolkit.api.security.oauth.features.user
+package io.felipepoliveira.fpmtoolkit.security.oauth.features.user
 
 interface UserModel {
     /**

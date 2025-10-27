@@ -1,6 +1,6 @@
-package io.felipepoliveira.fpmtoolkit.api.security.oauth.features.authorizationCode
+package io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode
 
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.features.userConsent.UserConsentModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModel
 import java.time.LocalDateTime
 
 interface AuthorizationCodeModel {

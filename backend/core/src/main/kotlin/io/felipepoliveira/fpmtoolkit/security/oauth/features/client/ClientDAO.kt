@@ -1,4 +1,4 @@
-package io.felipepoliveira.fpmtoolkit.api.security.oauth.features.client
+package io.felipepoliveira.fpmtoolkit.security.oauth.features.client
 
 interface ClientDAO<T : ClientModel> {
 

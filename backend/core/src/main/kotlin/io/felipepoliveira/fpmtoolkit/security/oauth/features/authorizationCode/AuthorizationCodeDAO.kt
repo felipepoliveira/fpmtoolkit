@@ -1,4 +1,4 @@
-package io.felipepoliveira.fpmtoolkit.api.security.oauth.features.authorizationCode
+package io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode
 
 interface AuthorizationCodeDAO<T: AuthorizationCodeModel> {
 

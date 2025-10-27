@@ -5,13 +5,14 @@ import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.api.controllers.BaseRestController
 import io.felipepoliveira.fpmtoolkit.api.security.auth.RequestClient
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.AuthorizeRequest
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.OAuthService
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.features.client.ClientModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.OAuthService
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
@@ -28,19 +29,35 @@ class OAuthController @Autowired constructor(
 
         // check if the params (client authorization, grants and redirect uri) are valid
         val client = validateAuthorizeRequest(params)
-        val consent = if (requestClient != null) authService.tryFindConsentAndValidate(requestClient, client, params) else null
 
-        // If the client is already consent send directly to the redirectUri informed by it
+
+        // if the client has a valid consent from the user app will redirect to the client callback
+        val consent = if (requestClient != null) authService.tryFindConsentAndValidateAuthorizeRequest(
+            requestClient, client, params
+        ) else null
+
+        // if there is a valid consent redirect to the given 'redirect_uri'
         if (consent != null) {
-
+            return redirect(
+                UriComponentsBuilder
+                    .fromUriString(params.redirectUri)
+                    .queryParam("code", authService.createAuthorizationCode(consent, params).code)
+                    .queryParam("state", params.state)
+                    .toUriString()
+            )
         }
 
-        // otherwise send to the consent front-end page
-        val redirectUri = UriComponentsBuilder
-            .fromUriString("https://localhost:3000/oauth2/code/oidc-client")
-            .toUriString("code")
-
-        return redirect(redirectUri)
+        return redirect(
+            UriComponentsBuilder
+                .fromUriString("https://localhost:3000/oauth2/code/oidc-client")
+                .queryParam("redirect_uri", params.redirectUri)
+                .queryParam("scope", params.scope)
+                .queryParam("client_id", params.clientId)
+                .queryParam("state", params.state)
+                .queryParam("code_challenge", params.codeChallenge)
+                .queryParam("code_challenge_method", params.codeChallengeMethod)
+                .toUriString()
+        )
     }
 
     private fun validateAuthorizeRequest(authorizeRequest: AuthorizeRequest): ClientModel {

@@ -1,7 +1,7 @@
-package io.felipepoliveira.fpmtoolkit.api.security.oauth.features.userConsent
+package io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent
 
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.features.client.ClientModel
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.features.user.UserModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModel
 import java.time.LocalDateTime
 
 interface UserConsentModel {

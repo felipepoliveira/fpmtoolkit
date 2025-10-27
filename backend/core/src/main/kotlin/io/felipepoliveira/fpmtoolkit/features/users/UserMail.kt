@@ -3,7 +3,7 @@ package io.felipepoliveira.fpmtoolkit.features.users
 import io.felipepoliveira.fpmtoolkit.beans.context.ContextualBeans
 import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
-import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.i18n.I18n
+import io.felipepoliveira.fpmtoolkit.i18n.I18n
 import io.felipepoliveira.fpmtoolkit.mail.MailContentType
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipient
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipientType

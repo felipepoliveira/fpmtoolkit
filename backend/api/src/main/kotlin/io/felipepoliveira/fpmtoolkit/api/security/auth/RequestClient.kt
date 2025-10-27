@@ -1,8 +1,8 @@
 package io.felipepoliveira.fpmtoolkit.api.security.auth
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.felipepoliveira.fpmtoolkit.api.security.oauth.features.user.UserModel
 import io.felipepoliveira.fpmtoolkit.api.security.tokens.ApiAuthenticationTokenPayload
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModel
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
