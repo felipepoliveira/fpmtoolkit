@@ -43,9 +43,12 @@ abstract class OAuthService @Autowired constructor(
         user: UserModel, client: ClientModel, params: AuthorizeDTO
     ): UserConsentModel? {
         val consent = userConsentDAO.findConsent(user, client)
-        return if (consent != null && // client should have granted authorization
-            consent.grants.containsAll(params.scope.split(" ")) &&  // consent should have all grants requested
-            client.allowedRedirectUris.contains(params.redirectUri) // redirect URI should be previously allowed
+        val scope = params.scope
+        val redirectUri = params.redirectUri
+        return if (
+            consent != null && // client should have granted authorization
+            scope != null && consent.grants.containsAll(scope.split(" ")) &&  // consent should have all grants requested
+            redirectUri != null && client.allowedRedirectUris.contains(params.redirectUri) // redirect URI should be previously allowed
             ) {
             consent
         } else {

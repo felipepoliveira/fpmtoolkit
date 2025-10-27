@@ -9,10 +9,10 @@ interface ClientModel {
     /**
      * Store the allowed URIs for the client
      */
-    val allowedRedirectUris: Set<String>
+    val allowedRedirectUris: List<String>
 
     /**
      * Store granted roles for the given client
      */
-    val grantedScopes: Set<String>
+    val grantedScopes: List<String>
 }
