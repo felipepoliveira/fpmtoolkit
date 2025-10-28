@@ -50,6 +50,13 @@ interface AuthorizationCodeModel {
         val codeChallengeMethod = codeChallengeMethod
         val codeVerifier = refresh.codeVerifier
 
+        if (expiresAt.isBefore(LocalDateTime.now())) {
+            throw BusinessRuleException(
+                BusinessRulesError.INVALID_PARAMETERS,
+                "Given 'code' is expired"
+            )
+        }
+
         // if there is a code challenge established validate it
         if (codeChallengeMethod != null) {
 
