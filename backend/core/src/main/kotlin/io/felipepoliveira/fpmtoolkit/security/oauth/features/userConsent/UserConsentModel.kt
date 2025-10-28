@@ -24,17 +24,4 @@ interface UserConsentModel {
      * Witch grants was granted from user to the client
      */
     val grants: Set<String>
-
-    /**
-     * The code challenge used RFC 7636 — Proof Key for Code Exchange (PKCE):
-     * https://datatracker.ietf.org/doc/html/rfc7636
-     */
-    val codeChallenge: String
-
-    /**
-     * The code challenge used RFC 7636 — Proof Key for Code Exchange (PKCE):
-     * https://datatracker.ietf.org/doc/html/rfc7636
-     */
-    val codeChallengeMethod: String
-
 }

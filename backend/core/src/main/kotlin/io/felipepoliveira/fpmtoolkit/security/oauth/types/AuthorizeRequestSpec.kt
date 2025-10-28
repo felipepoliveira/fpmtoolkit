@@ -1,10 +1,17 @@
-package io.felipepoliveira.fpmtoolkit.security.oauth.dto
+package io.felipepoliveira.fpmtoolkit.security.oauth.types
 
 /**
  * Authorize request for /authorize
  * (https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1#name-authorization-request)
  */
-interface AuthorizeDTO {
+interface AuthorizeRequestSpec {
+    /**
+     * REQUIRED. The authorization endpoint supports different sets of request and response parameters.
+     * The client determines the type of flow by using a certain response_type value.
+     * This specification defines the value code, which must be used to signal that the client wants
+     * to use the authorization code flow.
+     */
+    val responseType: String
     /**
      * REQUIRED. The client identifier as described in Section 2.2
      */

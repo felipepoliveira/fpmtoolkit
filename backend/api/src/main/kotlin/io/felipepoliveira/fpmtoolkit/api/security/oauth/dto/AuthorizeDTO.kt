@@ -1,6 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.api.security.oauth.dto
 
-import io.felipepoliveira.fpmtoolkit.security.oauth.dto.AuthorizeDTO
+import io.felipepoliveira.fpmtoolkit.security.oauth.types.AuthorizeRequestSpec
 import org.springframework.web.bind.annotation.RequestParam
 
 data class AuthorizeRequest(
@@ -10,4 +10,4 @@ data class AuthorizeRequest(
     @RequestParam(name = "redirect_uri", required = false) override val redirectUri: String?,
     @RequestParam(name = "scope", required = false) override val scope: String?,
     @RequestParam(name = "state", required = false) override val state: String?
-) : AuthorizeDTO
+) : AuthorizeRequestSpec

@@ -7,6 +7,12 @@ interface ClientModel {
     val clientId: String
 
     /**
+     * The client secret used for Client Authentication process
+     * (https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1#name-client-authentication)
+     */
+    val clientSecret: String
+
+    /**
      * Store the allowed URIs for the client
      */
     val allowedRedirectUris: List<String>
