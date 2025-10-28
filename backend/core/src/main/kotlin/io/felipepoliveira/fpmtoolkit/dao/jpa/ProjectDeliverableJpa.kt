@@ -1,12 +1,10 @@
 package io.felipepoliveira.fpmtoolkit.dao.jpa
 
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
-import io.felipepoliveira.fpmtoolkit.dao.jpa.BaseJpa
 import io.felipepoliveira.fpmtoolkit.ext.fetchAll
 import io.felipepoliveira.fpmtoolkit.ext.fetchAllPaginated
 import io.felipepoliveira.fpmtoolkit.ext.fetchFirst
 import io.felipepoliveira.fpmtoolkit.ext.fetchPagination
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.projectDeliverables.ProjectDeliverableDAO
 import io.felipepoliveira.fpmtoolkit.features.projectDeliverables.ProjectDeliverableModel
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectModel

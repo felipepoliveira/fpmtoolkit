@@ -3,7 +3,7 @@ package io.felipepoliveira.fpmtoolkit.security.oauth.types
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import java.security.MessageDigest
-import java.util.Base64
+import java.util.*
 
 /**
  * Represents the different types for CodeChallengeMethod
@@ -49,14 +49,13 @@ enum class CodeChallengeMethod {
 
 
         companion object {
-        fun fromAuthorizeRequest(authorizeRequest: AuthorizeRequestSpec): CodeChallengeMethod? {
-            return when (authorizeRequest.codeChallengeMethod) {
+        fun fromString(codeChallengeMethod: String): CodeChallengeMethod? {
+            return when (codeChallengeMethod) {
                 "S256" -> CodeChallengeMethod.S256
                 "plain" -> CodeChallengeMethod.PLAIN
-                null -> null
                 else -> throw BusinessRuleException(
                     error = BusinessRulesError.INVALID_PARAMETERS,
-                    "Invalid 'code_challenge_method': ${authorizeRequest.codeChallengeMethod}. Use: [S256, plain]"
+                    "Invalid 'code_challenge_method': ${codeChallengeMethod}. Use: [S256, plain]"
                 )
             }
         }

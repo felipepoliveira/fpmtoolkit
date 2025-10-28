@@ -3,11 +3,11 @@ package io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.types.CodeChallengeMethod
 import java.time.LocalDateTime
 
-interface AuthorizationCodeModel {
+interface AuthorizationCodeModelSpec {
 
     /**
      * A unique code that identifies the authorization code
@@ -17,7 +17,7 @@ interface AuthorizationCodeModel {
     /**
      * The user consent data
      */
-    val userConsent: UserConsentModel
+    val userConsent: UserConsentModelSpec
 
     /**
      * The redirect URI used in this authorization

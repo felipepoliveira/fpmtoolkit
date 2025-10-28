@@ -1,6 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.security.oauth.types
 
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModelSpec
 
 data class ValidatedAuthorizeRequest(
     /**
@@ -15,7 +15,7 @@ data class ValidatedAuthorizeRequest(
      * The client as defined in
      * REQUIRED. The client identifier as described in Section 2.2
      */
-    val client: ClientModel,
+    val client: ClientModelSpec,
 
     /**
      * REQUIRED unless the specific requirements of Section 7.5.1 are met. Code challenge derived from the code verifier.

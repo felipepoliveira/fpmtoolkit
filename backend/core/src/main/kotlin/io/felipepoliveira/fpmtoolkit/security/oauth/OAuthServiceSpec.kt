@@ -4,35 +4,34 @@ import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenResponse
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenModelSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeDAOSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeModelSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientDAOSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModelSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.refreshToken.RefreshTokenModelSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserDAOSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModelSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentDAOSpec
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.types.AuthorizeRequestSpec
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeDAO
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeModel
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientDAO
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModel
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.refreshToken.RefreshTokenModel
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserDAO
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModel
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentDAO
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModel
 import io.felipepoliveira.fpmtoolkit.security.oauth.types.AuthorizeResponseType
-import io.felipepoliveira.fpmtoolkit.security.oauth.types.ValidatedAuthorizeRequest
 import io.felipepoliveira.fpmtoolkit.security.oauth.types.CodeChallengeMethod
+import io.felipepoliveira.fpmtoolkit.security.oauth.types.ValidatedAuthorizeRequest
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.LocalDateTime
 
-abstract class OAuthService @Autowired constructor(
-    private val authorizationCodeDAO: AuthorizationCodeDAO<AuthorizationCodeModel>,
-    private val clientDAO: ClientDAO<ClientModel>,
-    private val userDAO: UserDAO<UserModel>,
-    private val userConsentDAO: UserConsentDAO<UserConsentModel>,
+abstract class OAuthServiceSpec @Autowired constructor(
+    private val authorizationCodeDAO: AuthorizationCodeDAOSpec,
+    private val clientDAO: ClientDAOSpec,
+    private val userConsentDAO: UserConsentDAOSpec,
 ) {
 
     /**
      * Find a ClientModel identified by its client_id
      */
-    fun findClientById(clientId: String): ClientModel {
+    fun findClientById(clientId: String): ClientModelSpec {
         return clientDAO.findById(clientId) ?: throw BusinessRuleException(
             BusinessRulesError.INVALID_PARAMETERS,
             "Could not find client identified by id: $clientId"
@@ -42,11 +41,11 @@ abstract class OAuthService @Autowired constructor(
     /**
      * Create an authorization code that is used in the /authorize pipeline
      */
-    abstract fun createAuthorizationCode(consent: UserConsentModel, params: AuthorizeRequestSpec): AuthorizationCodeModel
+    abstract fun createAuthorizationCode(consent: UserConsentModelSpec, params: ValidatedAuthorizeRequest): AuthorizationCodeModelSpec
 
-    abstract fun createAccessToken(authorizationCode: AuthorizationCodeModel): AccessTokenModel
+    abstract fun createAccessToken(authorizationCode: AuthorizationCodeModelSpec): AccessTokenModelSpec
 
-    abstract fun createRefreshToken(params: TokenRequestSpec, authorizationCode: AuthorizationCodeModel): RefreshTokenModel?
+    abstract fun createRefreshToken(params: TokenRequestSpec, authorizationCode: AuthorizationCodeModelSpec): RefreshTokenModelSpec?
 
     fun createToken(params: TokenRequestSpec): TokenResponse {
         // fetch the authorization
@@ -92,8 +91,8 @@ abstract class OAuthService @Autowired constructor(
      * Check if a given user has given consent to the given client with the given parameters
      */
     fun tryFindConsentAndValidateAuthorizeRequest(
-        user: UserModel, validatedRequest: ValidatedAuthorizeRequest
-    ): UserConsentModel? {
+        user: UserModelSpec, validatedRequest: ValidatedAuthorizeRequest
+    ): UserConsentModelSpec? {
         val consent = userConsentDAO.findConsent(user, validatedRequest.client)
         return if (
             consent != null && // client should have granted authorization
@@ -162,15 +161,18 @@ abstract class OAuthService @Autowired constructor(
             )
         }
 
-        return ValidatedAuthorizeRequest(
+        val codeChallengeMethod = authorizeRequest.codeChallengeMethod
+        val validatedAuthorizeRequest = ValidatedAuthorizeRequest(
             responseType = AuthorizeResponseType.CODE,
             client = client,
             codeChallenge = authorizeRequest.codeChallenge,
-            codeChallengeMethod = CodeChallengeMethod.fromAuthorizeRequest(authorizeRequest),
+            codeChallengeMethod = if(codeChallengeMethod != null) CodeChallengeMethod.fromString(codeChallengeMethod) else null,
             redirectUri = redirectUri,
-            scopes = if (scopes != null) scopes.toSet() else client.grantedScopes.toSet(),
+            scopes = scopes?.toSet() ?: client.grantedScopes.toSet(),
             state = authorizeRequest.state
         )
+
+        return validatedAuthorizeRequest
     }
 
 

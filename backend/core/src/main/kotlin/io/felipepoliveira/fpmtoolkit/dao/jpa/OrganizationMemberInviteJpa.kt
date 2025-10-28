@@ -4,9 +4,9 @@ import io.felipepoliveira.fpmtoolkit.dao.Pagination
 import io.felipepoliveira.fpmtoolkit.ext.fetchAllPaginated
 import io.felipepoliveira.fpmtoolkit.ext.fetchFirst
 import io.felipepoliveira.fpmtoolkit.ext.fetchPagination
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteDAO
 import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteModel
+import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import jakarta.persistence.Query
 import org.springframework.stereotype.Repository
 

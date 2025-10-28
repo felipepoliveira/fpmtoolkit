@@ -1,7 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.features.projectMembers
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberModel
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectModel
 import io.felipepoliveira.fpmtoolkit.features.users.UserModel
 import jakarta.persistence.*

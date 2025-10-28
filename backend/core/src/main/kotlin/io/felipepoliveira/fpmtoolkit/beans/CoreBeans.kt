@@ -2,6 +2,7 @@ package io.felipepoliveira.fpmtoolkit.beans
 
 import io.felipepoliveira.fpmtoolkit.beans.context.ContextualBeans
 import io.felipepoliveira.fpmtoolkit.beans.context.DevelopmentBeans
+import io.felipepoliveira.fpmtoolkit.cache.CacheHandler
 import jakarta.persistence.EntityManagerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -29,6 +30,12 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 class CoreBeans @Autowired constructor(
     private val appContextProvider: AppContextProvider
 ) {
+
+    /**
+     * Inject default CacheHandler bean in the app
+     */
+    @Bean
+    fun cacheHandler(contextualBeans: ContextualBeans): CacheHandler = contextualBeans.cacheHandler()
 
     /**
      * Return the bean that provide the contextuals beans of the application

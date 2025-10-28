@@ -2,7 +2,6 @@ package io.felipepoliveira.fpmtoolkit.features.projectMembers
 
 import io.felipepoliveira.fpmtoolkit.dao.DAO
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
-import io.felipepoliveira.fpmtoolkit.features.projectMembers.ProjectMemberModel
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectModel
 import io.felipepoliveira.fpmtoolkit.features.users.UserModel
 

@@ -2,7 +2,6 @@ package io.felipepoliveira.fpmtoolkit.tests.mocks.dao
 
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberModel
-import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberRoles
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationDAO
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationService

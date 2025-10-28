@@ -2,7 +2,7 @@ package io.felipepoliveira.fpmtoolkit.api.security.auth
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.felipepoliveira.fpmtoolkit.api.security.tokens.ApiAuthenticationTokenPayload
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModel
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModelSpec
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -58,7 +58,7 @@ class RequestClient(
      * When the session expires
      */
     val sessionExpiresAt: Instant,
-) : Authentication, UserModel {
+) : Authentication, UserModelSpec {
 
     /**
      * Create a RequestClient instance based on the API Authentication token as the authentication method

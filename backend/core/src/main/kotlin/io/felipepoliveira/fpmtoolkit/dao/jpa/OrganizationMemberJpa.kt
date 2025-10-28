@@ -1,8 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.dao.jpa
 
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
-import io.felipepoliveira.fpmtoolkit.dao.jpa.BaseJpa
-import io.felipepoliveira.fpmtoolkit.dao.jpa.HqlSmartQuery
 import io.felipepoliveira.fpmtoolkit.ext.fetchAllPaginated
 import io.felipepoliveira.fpmtoolkit.ext.fetchFirst
 import io.felipepoliveira.fpmtoolkit.ext.fetchPagination

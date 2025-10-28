@@ -16,6 +16,11 @@ interface TokenRequestSpec {
     val clientId: String?
 
     /**
+     * REQUIRED. The client secret
+     */
+    val clientSecret: String?
+
+    /**
      * REQUIRED. The authorization code received from the authorization server.
      */
     val code: String

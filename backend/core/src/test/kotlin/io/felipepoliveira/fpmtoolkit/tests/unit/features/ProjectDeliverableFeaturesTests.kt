@@ -4,7 +4,6 @@ import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.features.projectDeliverables.ProjectDeliverableService
 import io.felipepoliveira.fpmtoolkit.features.projectDeliverables.dao.CreateOrUpdateProjectDeliverableDTO
-import io.felipepoliveira.fpmtoolkit.features.projectMembers.ProjectMemberService
 import io.felipepoliveira.fpmtoolkit.tests.UnitTestsConfiguration
 import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedProjectDAO
 import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedProjectDeliverableDAO
@@ -12,7 +11,6 @@ import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedProjectMemberDAO
 import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedUserDAO
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.maps.shouldContainKeys
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull

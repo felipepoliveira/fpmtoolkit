@@ -7,7 +7,6 @@ import io.felipepoliveira.fpmtoolkit.beans.context.ContextualBeans
 import io.felipepoliveira.fpmtoolkit.commons.io.RandomString
 import io.felipepoliveira.fpmtoolkit.ext.addError
 import io.felipepoliveira.fpmtoolkit.features.users.dto.*
-import io.felipepoliveira.fpmtoolkitio.felipepoliveira.fpmtoolkit.features.users.dto.IsEmailAvailableDTO
 import io.felipepoliveira.fpmtoolkit.security.PasswordRank
 import io.felipepoliveira.fpmtoolkit.security.calculatePasswordRank
 import io.felipepoliveira.fpmtoolkit.security.comparePassword
@@ -16,6 +15,7 @@ import io.felipepoliveira.fpmtoolkit.security.tokens.PasswordRecoveryTokenProvid
 import io.felipepoliveira.fpmtoolkit.security.tokens.PrimaryEmailChangeTokenAndPayload
 import io.felipepoliveira.fpmtoolkit.security.tokens.PrimaryEmailChangeTokenProvider
 import io.felipepoliveira.fpmtoolkit.security.tokens.PrimaryEmailConfirmationTokenProvider
+import io.felipepoliveira.fpmtoolkitio.felipepoliveira.fpmtoolkit.features.users.dto.IsEmailAvailableDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

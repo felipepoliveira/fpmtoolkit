@@ -6,14 +6,12 @@ import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.beans.context.ContextualBeans
 import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
+import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.dto.CreateOrganizationMemberInviteDTO
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberDAO
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberRoles
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberService
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationService
 import io.felipepoliveira.fpmtoolkit.features.users.UserService
-import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.dto.CreateOrganizationMemberInviteDTO
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationMail
-import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteMail
 import io.felipepoliveira.fpmtoolkit.security.tokens.OrganizationMemberInviteTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -5,7 +5,6 @@ import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
 import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
 import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
-import io.felipepoliveira.fpmtoolkit.features.users.UserModel
 import io.felipepoliveira.fpmtoolkit.i18n.I18n
 import io.felipepoliveira.fpmtoolkit.mail.MailContentType
 import io.felipepoliveira.fpmtoolkit.mail.MailRecipient

@@ -1,10 +1,9 @@
 package io.felipepoliveira.fpmtoolkit.tests.mocks.dao
 
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteDAO
 import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteModel
-import io.felipepoliveira.fpmtoolkit.features.organizationMemberInvite.OrganizationMemberInviteService
+import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime

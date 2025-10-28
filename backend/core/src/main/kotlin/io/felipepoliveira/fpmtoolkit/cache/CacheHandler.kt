@@ -8,6 +8,11 @@ import java.time.Duration
 interface CacheHandler {
 
     /**
+     * Remove an item from cache
+     */
+    fun delete(key: String)
+
+    /**
      * Return the content stored in the cache identified by the given key
      */
     fun get(key: String): String?

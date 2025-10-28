@@ -1,6 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.security.oauth.features.client
 
-interface ClientModel {
+interface ClientModelSpec {
     /**
      * An unique ID to identify the client
      */
@@ -21,4 +21,9 @@ interface ClientModel {
      * Store granted roles for the given client
      */
     val grantedScopes: List<String>
+
+    /**
+     * Return a flag indicating if the given secret matches
+     */
+    fun secretMatches(clientSecret: String): Boolean
 }

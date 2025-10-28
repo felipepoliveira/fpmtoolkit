@@ -2,11 +2,13 @@ package io.felipepoliveira.fpmtoolkit.tests.unit.features
 
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationService
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectService
 import io.felipepoliveira.fpmtoolkit.features.projects.dto.CreateOrUpdateProjectDTO
 import io.felipepoliveira.fpmtoolkit.tests.UnitTestsConfiguration
-import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.*
+import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedOrganizationDAO
+import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedOrganizationMemberDAO
+import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedProjectDAO
+import io.felipepoliveira.fpmtoolkit.tests.mocks.dao.MockedUserDAO
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.ints.shouldBeGreaterThan

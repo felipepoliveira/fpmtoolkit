@@ -9,5 +9,6 @@ data class AuthorizeRequest(
     @RequestParam(name = "code_challenge_method", required = false) override val codeChallengeMethod: String?,
     @RequestParam(name = "redirect_uri", required = false) override val redirectUri: String?,
     @RequestParam(name = "scope", required = false) override val scope: String?,
-    @RequestParam(name = "state", required = false) override val state: String?
+    @RequestParam(name = "state", required = false) override val state: String?,
+    @RequestParam(name = "response_type") override val responseType: String
 ) : AuthorizeRequestSpec

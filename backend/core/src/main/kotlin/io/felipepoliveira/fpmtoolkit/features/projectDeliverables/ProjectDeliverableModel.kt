@@ -7,7 +7,6 @@ import io.felipepoliveira.fpmtoolkit.features.projects.ProjectModel
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
-import java.time.Duration
 import java.time.LocalDate
 import java.time.Period
 

@@ -1,6 +1,6 @@
 package io.felipepoliveira.fpmtoolkit.security.oauth.features.user
 
-interface UserModel {
+interface UserModelSpec {
     /**
      * An unique identifier for the end user
      */

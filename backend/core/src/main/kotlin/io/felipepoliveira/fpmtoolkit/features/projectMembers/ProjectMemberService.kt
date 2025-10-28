@@ -6,7 +6,6 @@ import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.dao.Pagination
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberRoles
 import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberService
-import io.felipepoliveira.fpmtoolkit.features.organizations.OrganizationModel
 import io.felipepoliveira.fpmtoolkit.features.projectMembers.dto.AddProjectMemberByUserDTO
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectModel
 import io.felipepoliveira.fpmtoolkit.features.projects.ProjectService

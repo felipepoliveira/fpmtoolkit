@@ -3,7 +3,6 @@ package io.felipepoliveira.fpmtoolkit.mail
 import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
 import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
-import java.io.InputStream
 
 class MailTemplates {
     companion object {

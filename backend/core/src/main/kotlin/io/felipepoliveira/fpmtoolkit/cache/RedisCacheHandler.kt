@@ -9,6 +9,12 @@ import java.time.Duration
 class RedisCacheHandler(
     private val jedisPool: JedisPool
 ) : CacheHandler {
+    override fun delete(key: String) {
+        jedisPool.resource.use { jedis ->
+            jedis.del(key)
+        }
+    }
+
     override fun get(key: String): String? {
         jedisPool.resource.use { jedis ->
             return jedis.get(key)

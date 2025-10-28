@@ -3,8 +3,7 @@ package io.felipepoliveira.fpmtoolkit.i18n
 import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
 import io.felipepoliveira.fpmtoolkit.commons.io.WildcardString
 import io.felipepoliveira.fpmtoolkit.commons.io.getLocalizedResourceAsInputStream
-import java.lang.IllegalArgumentException
-import java.util.Properties
+import java.util.*
 
 class I18n {
     companion object {

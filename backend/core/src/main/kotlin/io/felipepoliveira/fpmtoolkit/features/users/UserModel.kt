@@ -2,6 +2,7 @@ package io.felipepoliveira.fpmtoolkit.features.users
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModelSpec
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
@@ -67,4 +68,8 @@ class UserModel(
     @field:Column(name = "uuid", length = 40, nullable = false)
     @field:NotNull
     val uuid: String,
-)
+) : UserModelSpec {
+
+    override val userId: String
+        get() = uuid
+}

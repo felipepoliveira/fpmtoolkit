@@ -2,7 +2,7 @@ package io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken
 
 import java.time.LocalDateTime
 
-interface AccessTokenModel {
+interface AccessTokenModelSpec {
     /**
      * A unique identifier for access token
      */
