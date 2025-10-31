@@ -1,8 +1,7 @@
-package io.felipepoliveira.fpmtoolkit.features.oauth.userConsent
+package io.felipepoliveira.fpmtoolkit.features.userConsent
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import io.felipepoliveira.fpmtoolkit.features.oauth.client.ThirdPartyApplicationModel
-import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberRoles
+import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationModel
 import io.felipepoliveira.fpmtoolkit.features.users.UserModel
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModelSpec
 import jakarta.persistence.*
@@ -20,6 +19,7 @@ class UserConsentModel(
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     val id: Long?,
 
     /**
@@ -44,7 +44,7 @@ class UserConsentModel(
      */
     @Column(name = "consented_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    override val consentedAt: LocalDateTime,
+    override var consentedAt: LocalDateTime,
 
     /**
      * Store all allowed redirect URI for third party app
@@ -57,7 +57,7 @@ class UserConsentModel(
         name = "role",
         nullable = false,
         length = 255
-    ) @Enumerated(EnumType.STRING)
+    )
     @field:Size(min = 1)
-    override val grants: Set<String>
+    override var grants: Set<String>
 ) : UserConsentModelSpec

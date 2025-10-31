@@ -9,6 +9,7 @@ import java.time.Duration
  * @see CacheHandler
  */
 class MockedCacheHandler : CacheHandler {
+    override fun delete(key: String) {}
 
     override fun get(key: String): String? = null
 

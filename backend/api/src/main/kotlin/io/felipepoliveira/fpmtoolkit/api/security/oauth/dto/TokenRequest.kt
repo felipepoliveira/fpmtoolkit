@@ -4,10 +4,10 @@ import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oaut
 import org.springframework.web.bind.annotation.RequestParam
 
 data class TokenRequest(
-    @RequestParam(name = "grant_type") override val grantType: String,
-    @RequestParam(name = "client_id", required = false) override val clientId: String?,
-    @RequestParam(name = "code") override val code: String,
-    @RequestParam(name = "code_verifier", required = false) override val codeVerifier: String?,
-    @RequestParam(name = "redirect_uri") override val redirectUri: String,
-    @RequestParam(name = "client_secret", required = false)override val clientSecret: String?
+    override val grantType: String,
+    override val clientId: String,
+    override val code: String,
+    override val codeVerifier: String?,
+    override val redirectUri: String,
+    override val clientSecret: String?
 ) : TokenRequestSpec

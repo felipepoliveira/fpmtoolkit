@@ -1,4 +1,4 @@
-package io.felipepoliveira.fpmtoolkit.features.oauth.userConsent
+package io.felipepoliveira.fpmtoolkit.features.userConsent
 
 import io.felipepoliveira.fpmtoolkit.dao.DAO
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentDAOSpec

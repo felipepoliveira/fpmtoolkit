@@ -2,6 +2,7 @@ package io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode
 
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
+import io.felipepoliveira.fpmtoolkit.features.userConsent.UserConsentModel
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.types.CodeChallengeMethod
@@ -15,9 +16,14 @@ interface AuthorizationCodeModelSpec {
     val code: String
 
     /**
-     * The user consent data
+     * Identifier for user
      */
-    val userConsent: UserConsentModelSpec
+    val userId: String
+
+    /**
+     * Identifier for client
+     */
+    val clientId: String
 
     /**
      * The redirect URI used in this authorization

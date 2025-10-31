@@ -1,10 +1,11 @@
-package io.felipepoliveira.fpmtoolkit.features.oauth.client
+package io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication
 
-import io.felipepoliveira.fpmtoolkit.features.organizationMembers.OrganizationMemberRoles
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModelSpec
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import org.springframework.security.crypto.bcrypt.BCrypt
 
 @Entity
 @Table(name = "third_party_app", indexes = [
@@ -16,10 +17,11 @@ class ThirdPartyApplicationModel(
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     val id: Long?,
 
     /**
-     * An unique Client ID
+     * A unique Client ID
      */
     @Column(name = "client_id", nullable = false, length = 48)
     @field:NotBlank
@@ -36,12 +38,13 @@ class ThirdPartyApplicationModel(
      */
     @Column(name = "client_secret", nullable = false, length = 64)
     @field:NotBlank
+    @JsonIgnore
     override val clientSecret: String,
 
     /**
      * Store all allowed redirect URI for third party app
      */
-    @field:ElementCollection(targetClass = OrganizationMemberRoles::class, fetch = FetchType.EAGER)
+    @field:ElementCollection(fetch = FetchType.EAGER)
     @field:JoinTable(
         name = "third_party_app_allowed_redirect_uri",
         joinColumns = [JoinColumn(name = "app_id")],
@@ -49,7 +52,7 @@ class ThirdPartyApplicationModel(
         name = "redirect_uri",
         nullable = false,
         length = 255
-    ) @Enumerated(EnumType.STRING)
+    )
     @field:Size(min = 1)
     override val allowedRedirectUris: List<String>,
 
@@ -64,13 +67,13 @@ class ThirdPartyApplicationModel(
         name = "scope",
         nullable = false,
         length = 80
-    ) @Enumerated(EnumType.STRING)
+    )
     @field:Size(min = 1)
     override val grantedScopes: List<String>
 
 ) : ClientModelSpec {
 
     override fun secretMatches(clientSecret: String): Boolean {
-        TODO("Not yet implemented")
+        return this.clientSecret == clientSecret
     }
 }

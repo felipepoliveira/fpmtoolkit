@@ -1,5 +1,7 @@
 package io.felipepoliveira.fpmtoolkit.api.controllers
 
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 
 typealias EmptyResponseBuilderCallback = (responseBuilder: ResponseEntity.BodyBuilder) -> Unit
@@ -31,10 +33,10 @@ abstract class BaseRestController {
     /**
      * Send a redirect request (302) to the given location
      */
-    fun redirect(location: String): ResponseEntity<Any> {
-        return send(302) { reqBuilder ->
-            reqBuilder.header("Location", location)
-        }
+    fun redirect(location: String, defaultResponseEntity: ResponseEntity.BodyBuilder? = null): ResponseEntity<Any> {
+        val responseEntity = defaultResponseEntity?: ResponseEntity.status(302)
+        responseEntity.header("Location", location)
+        return responseEntity.build<Any>()
     }
 
     /**

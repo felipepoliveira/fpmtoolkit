@@ -4,11 +4,11 @@ import io.felipepoliveira.fpmtoolkit.security.oauth.types.AuthorizeRequestSpec
 import org.springframework.web.bind.annotation.RequestParam
 
 data class AuthorizeRequest(
-    @RequestParam(name = "client_id") override val clientId: String,
-    @RequestParam(name = "code_challenge", required = false) override val codeChallenge: String?,
-    @RequestParam(name = "code_challenge_method", required = false) override val codeChallengeMethod: String?,
-    @RequestParam(name = "redirect_uri", required = false) override val redirectUri: String?,
-    @RequestParam(name = "scope", required = false) override val scope: String?,
-    @RequestParam(name = "state", required = false) override val state: String?,
-    @RequestParam(name = "response_type") override val responseType: String
+    override val clientId: String,
+    override val codeChallenge: String,
+    override val codeChallengeMethod: String,
+    override val redirectUri: String?,
+    override val scope: String,
+    override val state: String?,
+    override val responseType: String
 ) : AuthorizeRequestSpec

@@ -10,7 +10,6 @@ import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.A
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.client.ClientModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.refreshToken.RefreshTokenModelSpec
-import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.userConsent.UserConsentModelSpec
@@ -54,13 +53,20 @@ abstract class OAuthServiceSpec @Autowired constructor(
             "Invalid 'code' given"
         )
 
+        //TODO implement refrsh token logic
+
         // verify the 'authorization_code'
         authorizationCode.validate(params)
 
-        if(!authorizationCode.userConsent.client.allowedRedirectUris.contains(params.redirectUri)) {
+        val client = clientDAO.findById(params.clientId) ?: throw BusinessRuleException(
+            BusinessRulesError.INVALID_PARAMETERS,
+            "Invalid 'client_id': Could not find client"
+        )
+
+        if(!client.allowedRedirectUris.contains(params.redirectUri)) {
             throw BusinessRuleException(
                 BusinessRulesError.INVALID_PARAMETERS,
-                "Given 'redirect_uri' is not allowed for client_id ${authorizationCode.userConsent.client.clientId}"
+                "Given 'redirect_uri' is not allowed for client_id ${client.clientId}"
             )
         }
 
@@ -105,20 +111,6 @@ abstract class OAuthServiceSpec @Autowired constructor(
     }
 
     fun validateAuthorizeRequest(authorizeRequest: AuthorizeRequestSpec): ValidatedAuthorizeRequest {
-
-        if (authorizeRequest.codeChallenge == null) {
-            throw BusinessRuleException(
-                BusinessRulesError.INVALID_PARAMETERS,
-                "'code_challenge' parameter is required"
-            )
-        }
-
-        if (authorizeRequest.codeChallenge != null && authorizeRequest.codeChallengeMethod == null) {
-            throw BusinessRuleException(
-                BusinessRulesError.INVALID_PARAMETERS,
-                "'code_challenge_method' is required when 'code_challenge' is defined"
-            )
-        }
 
         if (authorizeRequest.responseType != "code") {
             throw BusinessRuleException(
@@ -166,7 +158,7 @@ abstract class OAuthServiceSpec @Autowired constructor(
             responseType = AuthorizeResponseType.CODE,
             client = client,
             codeChallenge = authorizeRequest.codeChallenge,
-            codeChallengeMethod = if(codeChallengeMethod != null) CodeChallengeMethod.fromString(codeChallengeMethod) else null,
+            codeChallengeMethod = CodeChallengeMethod.fromString(codeChallengeMethod),
             redirectUri = redirectUri,
             scopes = scopes?.toSet() ?: client.grantedScopes.toSet(),
             state = authorizeRequest.state

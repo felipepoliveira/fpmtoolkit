@@ -24,6 +24,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 @ComponentScans(value = [
     ComponentScan("io.felipepoliveira.fpmtoolkit.dao"),
     ComponentScan("io.felipepoliveira.fpmtoolkit.features"),
+    ComponentScan("io.felipepoliveira.fpmtoolkit.jobs"),
     ComponentScan("io.felipepoliveira.fpmtoolkit.security"),
 ])
 @Configuration

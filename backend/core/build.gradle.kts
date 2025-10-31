@@ -22,6 +22,7 @@ plugins {
 allOpen {
     // Marks all below to be all open
     annotation("org.springframework.context.annotation.Configuration")
+    annotation("org.springframework.stereotype.Component")
     annotation("org.springframework.stereotype.Repository")
     annotation("org.springframework.stereotype.Service")
 }

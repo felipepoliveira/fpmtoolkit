@@ -4,6 +4,7 @@ import io.felipepoliveira.fpmtoolkit.commons.i18n.I18nRegion
 import io.felipepoliveira.fpmtoolkit.features.users.UserDAO
 import io.felipepoliveira.fpmtoolkit.features.users.UserModel
 import io.felipepoliveira.fpmtoolkit.security.hashPassword
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.user.UserModelSpec
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -124,6 +125,10 @@ class MockedUserDAO : BaseMockedDAO<Long, UserModel>(), UserDAO {
         return mock(
             mockedDatabase.find { m -> m.reference.id == id }
         )
+    }
+
+    override fun findById(userId: String): UserModelSpec? {
+        return findByUuid(userId)
     }
 
 }

@@ -20,12 +20,12 @@ interface AuthorizeRequestSpec {
     /**
      * REQUIRED unless the specific requirements of Section 7.5.1 are met. Code challenge derived from the code verifier.
      */
-    val codeChallenge: String?
+    val codeChallenge: String
 
     /**
      * OPTIONAL, defaults to plain if not present in the request. Code verifier transformation method is S256 or plain.
      */
-    val codeChallengeMethod: String?
+    val codeChallengeMethod: String
 
     /**
      * OPTIONAL if only one redirect URI is registered for this client. REQUIRED if multiple redirict

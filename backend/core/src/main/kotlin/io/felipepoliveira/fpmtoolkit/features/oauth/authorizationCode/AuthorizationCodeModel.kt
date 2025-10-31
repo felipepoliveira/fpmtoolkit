@@ -7,10 +7,11 @@ import java.time.LocalDateTime
 
 class AuthorizationCodeModel(
     override val code: String,
-    override val userConsent: UserConsentModelSpec,
     override val redirectUri: String,
     override val requestedScopes: Set<String>,
     override val codeChallenge: String?,
     override val codeChallengeMethod: CodeChallengeMethod?,
-    override val expiresAt: LocalDateTime
+    override val expiresAt: LocalDateTime,
+    override val userId: String,
+    override val clientId: String
 ) : AuthorizationCodeModelSpec

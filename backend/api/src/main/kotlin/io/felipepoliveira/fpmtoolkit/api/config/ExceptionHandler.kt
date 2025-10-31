@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.HttpRequestMethodNotSupportedException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingRequestValueException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -24,7 +25,7 @@ class ExceptionHandler {
     }
 
     /**
-     * Catch errors related to client data deserialization
+     * Catch errors related to client data deserialization4
      */
     @ExceptionHandler(exception = [
         HttpMessageNotReadableException::class,
@@ -32,6 +33,7 @@ class ExceptionHandler {
         MissingRequestValueException::class,
     ])
     fun badRequest(exception: Exception): ResponseEntity<Any> {
+        exception.printStackTrace()
         return ResponseEntity
             .badRequest()
             .header("X-Reason", "You sent a request that could not be decoded by the server. Check the request parameters on the documentation")

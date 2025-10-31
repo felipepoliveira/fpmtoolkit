@@ -13,7 +13,7 @@ interface TokenRequestSpec {
      * OPTIONAL. The client identifier is needed when a form of client authentication that relies on the parameter is
      * used, or the grant_type requires identification of public clients.
      */
-    val clientId: String?
+    val clientId: String
 
     /**
      * REQUIRED. The client secret
