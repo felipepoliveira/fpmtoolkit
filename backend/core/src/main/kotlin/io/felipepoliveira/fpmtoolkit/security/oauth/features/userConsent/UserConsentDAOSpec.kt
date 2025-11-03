@@ -8,6 +8,10 @@ interface UserConsentDAOSpec {
     /**
      * Find a user consent for a given client
      */
-    fun findConsent(user: UserModelSpec, client: ClientModelSpec): UserConsentModelSpec?
+    fun findConsent(user: UserModelSpec, client: ClientModelSpec): UserConsentModelSpec? {
+        return findConsent(user.userId, client.clientId)
+    }
+
+    fun findConsent(userId: String, clientId: String): UserConsentModelSpec?
 
 }

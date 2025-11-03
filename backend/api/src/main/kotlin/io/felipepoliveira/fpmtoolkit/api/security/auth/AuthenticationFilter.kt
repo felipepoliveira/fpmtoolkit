@@ -56,6 +56,11 @@ class AuthenticationFilter @Autowired constructor(
      * the authentication token this method return null
      */
     private fun getAuthenticationToken(request: HttpServletRequest): String? {
+        val clientTokenFromParameter = request.getParameter("clientToken")
+        return getAuthenticationTokenFromAuthorizationHeader(request) ?: clientTokenFromParameter
+    }
+
+    private fun getAuthenticationTokenFromAuthorizationHeader(request: HttpServletRequest): String? {
         val headerValue = request.getHeader("Authorization") ?: return null
 
         if (!headerValue.startsWith("Bearer ")) {

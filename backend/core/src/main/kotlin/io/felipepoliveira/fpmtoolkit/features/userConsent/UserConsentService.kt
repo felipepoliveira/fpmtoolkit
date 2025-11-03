@@ -6,6 +6,7 @@ import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.ext.addError
 import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationDAO
 import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationModel
+import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationService
 import io.felipepoliveira.fpmtoolkit.features.users.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,8 +20,19 @@ class UserConsentService @Autowired constructor(
     private val userConsentDAO: UserConsentDAO,
     private val userService: UserService,
     private val thirdPartyApplicationDAO: ThirdPartyApplicationDAO,
+    private val thirdPartyApplicationService: ThirdPartyApplicationService,
     smartValidator: SmartValidator
 ) : BaseService(smartValidator) {
+
+    fun findConsent(requesterUuid: String, thirdPartyAppId: String): UserConsentModel {
+        return userConsentDAO.findConsent(
+            userService.assertFindByUuid(requesterUuid),
+            thirdPartyApplicationService.findByAppId(thirdPartyAppId)
+        ) as UserConsentModel? ?: throw BusinessRuleException(
+            BusinessRulesError.INVALID_CREDENTIALS,
+            "You did not has a consent to app $thirdPartyAppId"
+        )
+    }
 
     @Transactional
     fun registerConsent(requesterUuid: String, thirdPartyAppId : String): UserConsentModel {

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserConsentJpa : UserConsentDAO, BaseJpa<Long, UserConsentModel>() {
 
-    override fun findConsent(user: UserModelSpec, client: ClientModelSpec): UserConsentModelSpec? {
+    override fun findConsent(userId: String, clientId: String): UserConsentModelSpec? {
         return query("c")
             .where("c.user.uuid = :userId")
             .and("c.client.clientId = :clientId")
-            .setParameter("userId", user.userId)
-            .setParameter("clientId", client.clientId)
+            .setParameter("userId", userId)
+            .setParameter("clientId", clientId)
             .prepare()
             .fetchFirst()
     }

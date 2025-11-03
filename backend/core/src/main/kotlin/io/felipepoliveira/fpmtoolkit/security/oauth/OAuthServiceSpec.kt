@@ -3,7 +3,7 @@ package io.felipepoliveira.fpmtoolkit.security.oauth
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
-import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenResponse
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.GeneratedToken
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeModelSpec
@@ -46,14 +46,22 @@ abstract class OAuthServiceSpec @Autowired constructor(
 
     abstract fun createRefreshToken(params: TokenRequestSpec, authorizationCode: AuthorizationCodeModelSpec): RefreshTokenModelSpec?
 
-    fun createToken(params: TokenRequestSpec): TokenResponse {
+    fun createToken(params: TokenRequestSpec): GeneratedToken {
         // fetch the authorization
         val authorizationCode = authorizationCodeDAO.findByCode(params.code) ?: throw BusinessRuleException(
             BusinessRulesError.INVALID_PARAMETERS,
             "Invalid 'code' given"
         )
 
+        if (userConsentDAO.findConsent(authorizationCode.userId, authorizationCode.clientId) == null) {
+            throw BusinessRuleException(
+                BusinessRulesError.FORBIDDEN,
+                "User has removed your consent"
+            )
+        }
+
         //TODO implement refrsh token logic
+
 
         // verify the 'authorization_code'
         authorizationCode.validate(params)
@@ -70,10 +78,10 @@ abstract class OAuthServiceSpec @Autowired constructor(
             )
         }
 
+
         // create tokens
         val accessToken = createAccessToken(authorizationCode)
         val refreshToken = createRefreshToken(params, authorizationCode)
-
 
         val expiresInSeconds = Duration.between(LocalDateTime.now(), accessToken.expiresAt).seconds
         if (expiresInSeconds < 0) {
@@ -83,7 +91,7 @@ abstract class OAuthServiceSpec @Autowired constructor(
         // invalidate current authorization code
         authorizationCodeDAO.revoke(authorizationCode)
 
-        return TokenResponse(
+        return GeneratedToken(
             accessToken = accessToken.token,
             tokenType = "Bearer",
             expiresIn = expiresInSeconds,

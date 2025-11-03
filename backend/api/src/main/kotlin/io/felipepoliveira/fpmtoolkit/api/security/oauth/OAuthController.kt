@@ -4,6 +4,7 @@ import io.felipepoliveira.fpmtoolkit.api.controllers.BaseRestController
 import io.felipepoliveira.fpmtoolkit.api.security.auth.RequestClient
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.AuthorizeRequest
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.TokenRequest
+import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.TokenResponse
 import io.felipepoliveira.fpmtoolkit.security.oauth.OAuthServiceSpec
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -62,7 +63,8 @@ class OAuthController @Autowired constructor(
 
         return redirect(
             UriComponentsBuilder
-                .fromUriString("https://localhost:3000/oauth2/code/oidc-client")
+                .fromUriString("http://localhost:4000/oauth2/code/oidc-client")
+                .queryParam("client_id", clientId)
                 .queryParam("state", state)
                 .queryParam("redirect_uri", redirectUri)
                 .queryParam("code_challenge", codeChallenge)
@@ -82,7 +84,7 @@ class OAuthController @Autowired constructor(
         @RequestParam(name = "redirect_uri") redirectUri: String,
         @RequestParam(name = "client_secret", required = false) clientSecret: String?
     ) = ok {
-        authService.createToken(TokenRequest(
+        val generatedToken = authService.createToken(TokenRequest(
             grantType = grantType,
             clientId = clientId,
             code = code,
@@ -90,6 +92,8 @@ class OAuthController @Autowired constructor(
             redirectUri = redirectUri,
             clientSecret = clientSecret
         ))
+
+        TokenResponse(generatedToken)
     }
 
 

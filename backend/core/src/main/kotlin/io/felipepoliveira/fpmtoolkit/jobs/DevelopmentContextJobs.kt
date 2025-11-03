@@ -48,6 +48,7 @@ class DevelopmentContextJobs @Autowired constructor(
             ),
             allowedRedirectUris = listOf(
                 "http://localhost",
+                "https://oauth.pstmn.io/v1/callback",
 //                "https://localhost",
             )
         ))

@@ -19,6 +19,7 @@ import JoinOrganizationPage from './join-organization/JoinOrganizationPage'
 import ConfirmEmailPage from './confirm-email/ConfirmEmailPage'
 import OrganizationProjectsListPage from './o/[profileName]/projects/OrganizationProjectsListPage'
 import ProjectHomePage from './o/[profileName]/p/[profileName]/ProjectHomePage'
+import OAuth2OidcConsentPage from './login/oauth2/code/oidc-client/OAuth2OidcClientLoginPage'
 
 
 
@@ -90,6 +91,7 @@ function App() {
             <Route path='/o/:profileName/members' element={<OrganizationMembersPage />} />
             <Route path='/o/:profileName/p/:projectProfileName' element={<ProjectHomePage />} />
             <Route path='/o/:profileName/projects' element={<OrganizationProjectsListPage />} />
+            <Route path='/oauth2/code/oidc-client' element={<OAuth2OidcConsentPage />} />
             <Route path='/organizations/create' element={<CreateOrganizationPage />} />
           </Route>
 
