@@ -18,14 +18,14 @@ class RefreshTokenCache @Autowired constructor(
         return "oauth-refreshToken-$code"
     }
 
-    override fun findById(tokenId: String): RefreshTokenModel? {
-        val cachedRefreshToken = cacheHandler.get(generateKey(tokenId)) ?: return null
+    override fun findByToken(token: String): RefreshTokenModel? {
+        val cachedRefreshToken = cacheHandler.get(generateKey(token)) ?: return null
         return objectMapper.readValue(cachedRefreshToken, RefreshTokenModel::class.java)
     }
 
     override fun persist(token: RefreshTokenModel): RefreshTokenModel {
         cacheHandler.put(
-            generateKey(token.id),
+            generateKey(token.token),
             objectMapper.writeValueAsString(token),
             Duration.between(LocalDateTime.now(), token.expiresAt)
         )
@@ -33,7 +33,7 @@ class RefreshTokenCache @Autowired constructor(
     }
 
     override fun revoke(token: RefreshTokenModel): RefreshTokenModel {
-        cacheHandler.delete(generateKey(token.id))
+        cacheHandler.delete(generateKey(token.token))
         return token
     }
 }

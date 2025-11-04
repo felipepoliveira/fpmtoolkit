@@ -19,21 +19,21 @@ class AccessTokenCache @Autowired constructor(
         return "oauth-accessToken-$tokenId"
     }
 
-    override fun findById(tokenId: String): AccessTokenModelSpec? {
-        val key = generateKey(tokenId)
+    override fun findByToken(token: String): AccessTokenModelSpec? {
+        val key = generateKey(token)
         val cachedAccessToken = cacheHandler.get(key) ?: return null
         return objectMapper.readValue(cachedAccessToken, AccessTokenModel::class.java)
     }
 
     override fun persist(token: AccessTokenModelSpec): AccessTokenModelSpec {
         cacheHandler.put(
-            generateKey(token.id), objectMapper.writeValueAsString(token), Duration.between(LocalDateTime.now(), token.expiresAt)
+            generateKey(token.token), objectMapper.writeValueAsString(token), Duration.between(LocalDateTime.now(), token.expiresAt)
         )
         return token
     }
 
     override fun revoke(token: AccessTokenModelSpec): AccessTokenModelSpec {
-        cacheHandler.delete(generateKey(token.id))
+        cacheHandler.delete(generateKey(token.token))
         return token
     }
 

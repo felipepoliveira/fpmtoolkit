@@ -4,7 +4,6 @@ import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessT
 import java.time.LocalDateTime
 
 class AccessTokenModel(
-    override val id: String,
     override val token: String,
     override val issuedAt: LocalDateTime,
     override val expiresAt: LocalDateTime

@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.RequestParam
 
 data class TokenRequest(
     override val grantType: String,
-    override val clientId: String,
-    override val code: String,
+    override val clientId: String?,
+    override val code: String?,
     override val codeVerifier: String?,
-    override val redirectUri: String,
-    override val clientSecret: String?
+    override val redirectUri: String?,
+    override val clientSecret: String?,
+    override val refreshToken: String?
 ) : TokenRequestSpec

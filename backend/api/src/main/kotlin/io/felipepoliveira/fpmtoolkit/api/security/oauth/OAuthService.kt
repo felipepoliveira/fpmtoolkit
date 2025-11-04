@@ -5,6 +5,7 @@ import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.api.security.tokens.ApiAuthenticationTokenProvider
 import io.felipepoliveira.fpmtoolkit.features.oauth.accessToken.AccessTokenModel
 import io.felipepoliveira.fpmtoolkit.features.oauth.authorizationCode.AuthorizationCodeModel
+import io.felipepoliveira.fpmtoolkit.features.oauth.refreshToken.RefreshTokenCache
 import io.felipepoliveira.fpmtoolkit.features.oauth.refreshToken.RefreshTokenModel
 import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationDAO
 import io.felipepoliveira.fpmtoolkit.features.userConsent.UserConsentDAO
@@ -38,7 +39,8 @@ class OAuthService @Autowired constructor(
     private val refreshTokenDAOSpec: RefreshTokenDAOSpec,
     private val userConsentDAO: UserConsentDAO,
     private val userDAO: UserDAO,
-) : OAuthServiceSpec(authorizationCodeDAO, clientDAO, userConsentDAO) {
+    private val refreshTokenCache: RefreshTokenCache,
+) : OAuthServiceSpec(authorizationCodeDAO, clientDAO, refreshTokenCache, userConsentDAO) {
 
     override fun createAuthorizationCode(
         consent: UserConsentModelSpec,
@@ -62,7 +64,7 @@ class OAuthService @Autowired constructor(
     }
 
     override fun createAccessToken(authorizationCode: AuthorizationCodeModelSpec): AccessTokenModelSpec {
-        val expiresAt = Instant.now().plus(15, ChronoUnit.MINUTES)
+        val expiresAt = Instant.now().plus(2, ChronoUnit.MINUTES)
         val token = apiAuthenticationTokenProvider.issue(
             user = userDAO.findById(authorizationCode.userId) as UserModel? ?: throw Exception("Exception"),
             clientIdentifier = authorizationCode.clientId,
@@ -72,11 +74,45 @@ class OAuthService @Autowired constructor(
             issuedAt = Instant.now()
         )
         val accessToken = AccessTokenModel(
-            id = token.token,
             expiresAt = LocalDateTime.ofInstant(expiresAt, ZoneId.systemDefault()),
             token = token.token,
             issuedAt = LocalDateTime.ofInstant(token.payload.issuedAt, ZoneId.systemDefault())
         )
+
+        if (userConsentDAO.findConsent(authorizationCode.userId, authorizationCode.clientId) == null) {
+            throw BusinessRuleException(
+                BusinessRulesError.INVALID_CREDENTIALS,
+                "User has removed your consent"
+            )
+        }
+
+        accessTokenDAOSpec.persist(accessToken)
+
+        return accessToken
+    }
+
+    override fun createAccessToken(refreshToken: RefreshTokenModelSpec): AccessTokenModelSpec {
+        val expiresAt = Instant.now().plus(2, ChronoUnit.MINUTES)
+        val token = apiAuthenticationTokenProvider.issue(
+            user = userDAO.findById(refreshToken.userId) as UserModel? ?: throw Exception("Exception"),
+            clientIdentifier = refreshToken.clientId,
+            expiresAt = expiresAt,
+            roles = arrayOf(),
+            organizationId = null,
+            issuedAt = Instant.now()
+        )
+        val accessToken = AccessTokenModel(
+            expiresAt = LocalDateTime.ofInstant(expiresAt, ZoneId.systemDefault()),
+            token = token.token,
+            issuedAt = LocalDateTime.ofInstant(token.payload.issuedAt, ZoneId.systemDefault())
+        )
+
+        if (userConsentDAO.findConsent(refreshToken.userId, refreshToken.clientId) == null) {
+            throw BusinessRuleException(
+                BusinessRulesError.INVALID_CREDENTIALS,
+                "User has removed your consent"
+            )
+        }
 
         accessTokenDAOSpec.persist(accessToken)
 
@@ -87,13 +123,10 @@ class OAuthService @Autowired constructor(
         params: TokenRequestSpec,
         authorizationCode: AuthorizationCodeModelSpec
     ): RefreshTokenModelSpec? {
-        val clientId = params.clientId
-        val clientSecret = params.clientSecret
-        if (clientId == null || clientSecret == null) {
-            return null
-        }
 
-        val client = clientDAO.findById(clientId) ?: throw BusinessRuleException(
+        val clientSecret = params.clientSecret ?: return null
+
+        val client = clientDAO.findById(authorizationCode.clientId) ?: throw BusinessRuleException(
             BusinessRulesError.INVALID_PARAMETERS,
             "Invalid 'client_id'"
         )
@@ -107,9 +140,11 @@ class OAuthService @Autowired constructor(
 
         val refreshTokenId = UUID.randomUUID().toString()
         val refreshToken = RefreshTokenModel(
-            id = refreshTokenId,
             token = refreshTokenId,
-            expiresAt = LocalDateTime.now().plusDays(30)
+            expiresAt = LocalDateTime.now().plusDays(30),
+            userId = authorizationCode.userId,
+            clientId = authorizationCode.clientId,
+            issuedAt = LocalDateTime.now()
         )
 
         refreshTokenDAOSpec.persist(refreshToken)

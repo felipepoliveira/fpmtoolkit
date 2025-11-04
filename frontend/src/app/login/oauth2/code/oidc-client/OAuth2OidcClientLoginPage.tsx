@@ -1,19 +1,15 @@
 import { Button } from "antd";
 import Title from "antd/es/typography/Title";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import OAuthService from "../../../../../api/backend-api/oauth";
 import ThirdPartyAppService from "../../../../../api/backend-api/third-party-app";
 import { ThirdPartyApplicationModel } from "../../../../../types/backend-api/third.party-application";
-import OAuthService from "../../../../../api/backend-api/oauth";
-import UserSessionStore from "../../../../../store/user-session";
-import { AuthenticatedAppContext } from "../../../../AuthenticatedApp";
-import SessionCredentialsStore from "../../../../../store/session-credentials";
 import { UserConsentModel } from "../../../../../types/backend-api/user-consent";
 
 type ComponentState = 'fetching' | 'ready' | 'error';
 
 export default function OAuth2OidcConsentPage() {
 
-    const authUserToken = SessionCredentialsStore.get()
     const searchParams = new URLSearchParams(document.location.search);
     const clientId = searchParams.get('client_id');
     const [selectedThirdPartyApp, setSelectedThirdPartyApp] = useState<ThirdPartyApplicationModel | undefined>(undefined);
@@ -67,10 +63,9 @@ export default function OAuth2OidcConsentPage() {
     async function consent() {
 
         // ignore if no third party app was fetched
-        if (!selectedThirdPartyApp || !authUserToken) {
+        if (!selectedThirdPartyApp) {
             return
         }
-
 
         try {
             await ThirdPartyAppService.registerConsent(selectedThirdPartyApp.clientId)
@@ -82,10 +77,10 @@ export default function OAuth2OidcConsentPage() {
     }
 
     function navigateToAuthorizationEndpoint() {
-        if (!selectedThirdPartyApp || !authUserToken) {
+        if (!selectedThirdPartyApp) {
             return;
         }
-        OAuthService.navigateToAuthorizationEndpoint({
+        OAuthService.navigateToRedirectUriOfAuthorizeRequest({
             clientId: selectedThirdPartyApp.clientId,
             codeChallenge: searchParams.get('code_challenge') || '',
             codeChallengeMethod: searchParams.get('code_challenge_method') || '',
@@ -93,7 +88,7 @@ export default function OAuth2OidcConsentPage() {
             scope: searchParams.get('scope') || '',
             redirectUri: searchParams.get('redirect_uri') || undefined,
             state: searchParams.get('state') || undefined,
-        }, authUserToken)
+        })
     }
 
     return (

@@ -4,14 +4,24 @@ import java.time.LocalDateTime
 
 interface RefreshTokenModelSpec {
     /**
-     * An unique identifier for refresh token
-     */
-    val id: String
-
-    /**
      * The token that will be used in the authentication process
      */
     val token: String
+
+    /**
+     * Identifier for the user
+     */
+    val userId: String
+
+    /**
+     * Identifier for client
+     */
+    val clientId: String
+
+    /**
+     * When the token was issued
+     */
+    val issuedAt: LocalDateTime
 
     /**
      * When the token will expire

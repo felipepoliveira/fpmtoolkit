@@ -13,7 +13,7 @@ interface TokenRequestSpec {
      * OPTIONAL. The client identifier is needed when a form of client authentication that relies on the parameter is
      * used, or the grant_type requires identification of public clients.
      */
-    val clientId: String
+    val clientId: String?
 
     /**
      * REQUIRED. The client secret
@@ -23,7 +23,7 @@ interface TokenRequestSpec {
     /**
      * REQUIRED. The authorization code received from the authorization server.
      */
-    val code: String
+    val code: String?
 
     /**
      * REQUIRED, if the code_challenge parameter was included in the authorization request.
@@ -34,5 +34,7 @@ interface TokenRequestSpec {
     /**
      *
      */
-    val redirectUri: String
+    val redirectUri: String?
+
+    val refreshToken: String?
 }

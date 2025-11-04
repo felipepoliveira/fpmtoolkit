@@ -22,6 +22,11 @@ abstract class BaseRestController {
      */
     fun ok(callback: ResponseBuilderCallbackWithBody) = send(200, callback)
 
+    fun ok(body: Any, defaultResponseEntity: ResponseEntity.BodyBuilder? = null): ResponseEntity<Any> {
+        val responseEntity = defaultResponseEntity?: ResponseEntity.status(200)
+        return responseEntity.body(body)
+    }
+
     /**
      * Send a redirect request (302) to the given location
      */
@@ -36,7 +41,7 @@ abstract class BaseRestController {
     fun redirect(location: String, defaultResponseEntity: ResponseEntity.BodyBuilder? = null): ResponseEntity<Any> {
         val responseEntity = defaultResponseEntity?: ResponseEntity.status(302)
         responseEntity.header("Location", location)
-        return responseEntity.build<Any>()
+        return responseEntity.build()
     }
 
     /**

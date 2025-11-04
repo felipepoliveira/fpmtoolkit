@@ -6,7 +6,7 @@ interface RefreshTokenDAOSpec {
     /**
      * Find an access token identified by its ID
      */
-    fun findById(tokenId: String): RefreshTokenModel?
+    fun findByToken(token: String): RefreshTokenModel?
 
     fun persist(token: RefreshTokenModel): RefreshTokenModel
 

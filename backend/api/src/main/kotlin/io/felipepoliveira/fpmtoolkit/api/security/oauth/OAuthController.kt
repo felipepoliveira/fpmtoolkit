@@ -3,6 +3,7 @@ package io.felipepoliveira.fpmtoolkit.api.security.oauth
 import io.felipepoliveira.fpmtoolkit.api.controllers.BaseRestController
 import io.felipepoliveira.fpmtoolkit.api.security.auth.RequestClient
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.AuthorizeRequest
+import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.AuthorizeResponse
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.TokenRequest
 import io.felipepoliveira.fpmtoolkit.api.security.oauth.dto.TokenResponse
 import io.felipepoliveira.fpmtoolkit.security.oauth.OAuthServiceSpec
@@ -31,6 +32,7 @@ class OAuthController @Autowired constructor(
         @RequestParam(name = "prompt", required = false) prompt: String?,
         @RequestParam(name = "redirect_uri", required = false) redirectUri: String?,
         @RequestParam(name = "state", required = false) state: String?,
+        @RequestParam(name = "redirect", required = false) redirect: Boolean?,
         authentication: Authentication?): ResponseEntity<Any> {
 
         // check if the params (client authorization, grants and redirect uri) are valid
@@ -52,36 +54,57 @@ class OAuthController @Autowired constructor(
 
         // if there is a valid consent redirect to the given 'redirect_uri'
         if (consent != null) {
-            return redirect(
-                UriComponentsBuilder
-                    .fromUriString(validatedRequest.redirectUri)
-                    .queryParam("code", authService.createAuthorizationCode(consent, validatedRequest).code)
-                    .queryParam("state", state)
-                    .toUriString()
-            )
+            val code = authService.createAuthorizationCode(consent, validatedRequest).code
+            val redirectUri = UriComponentsBuilder
+                .fromUriString(validatedRequest.redirectUri)
+                .queryParam("code", code)
+                .queryParam("state", state)
+                .toUriString()
+
+            return if (redirect != null && !redirect) {
+                return ok(AuthorizeResponse(redirectUri = redirectUri, code = code, state = state))
+            } else {
+                redirect(redirectUri)
+            }
         }
 
-        return redirect(
-            UriComponentsBuilder
-                .fromUriString("http://localhost:4000/oauth2/code/oidc-client")
-                .queryParam("client_id", clientId)
-                .queryParam("state", state)
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("code_challenge", codeChallenge)
-                .queryParam("code_challenge_method", codeChallengeMethod)
-                .queryParam("scope", scope)
-                .queryParam("response_type", responseType)
-                .toUriString()
-        )
+        val redirectUri = UriComponentsBuilder
+            .fromUriString("http://localhost:4000/oauth2/code/oidc-client")
+            .queryParam("client_id", clientId)
+            .queryParam("state", state)
+            .queryParam("redirect_uri", redirectUri)
+            .queryParam("code_challenge", codeChallenge)
+            .queryParam("code_challenge_method", codeChallengeMethod)
+            .queryParam("scope", scope)
+            .queryParam("response_type", responseType)
+            .toUriString()
+
+        return if (redirect != null && !redirect) {
+            return ok(
+                AuthorizeResponse(
+                    redirectUri = redirectUri,
+                    code = null,
+                    clientId = clientId,
+                    codeChallenge = codeChallenge,
+                    codeChallengeMethod = codeChallengeMethod,
+                    scope = scope,
+                    state = state,
+                    responseType = responseType
+                )
+            )
+        } else {
+            redirect(redirectUri)
+        }
     }
 
     @PostMapping("/token")
     fun token(
         @RequestParam(name = "grant_type") grantType: String,
-        @RequestParam(name = "client_id") clientId: String,
-        @RequestParam(name = "code") code: String,
+        @RequestParam(name = "client_id", required = false) clientId: String?,
+        @RequestParam(name = "code", required = false) code: String?,
         @RequestParam(name = "code_verifier", required = false) codeVerifier: String?,
-        @RequestParam(name = "redirect_uri") redirectUri: String,
+        @RequestParam(name = "redirect_uri", required = false) redirectUri: String?,
+        @RequestParam(name = "refresh_token", required = false) refreshToken: String?,
         @RequestParam(name = "client_secret", required = false) clientSecret: String?
     ) = ok {
         val generatedToken = authService.createToken(TokenRequest(
@@ -90,7 +113,8 @@ class OAuthController @Autowired constructor(
             code = code,
             codeVerifier = codeVerifier,
             redirectUri = redirectUri,
-            clientSecret = clientSecret
+            clientSecret = clientSecret,
+            refreshToken = refreshToken
         ))
 
         TokenResponse(generatedToken)

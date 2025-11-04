@@ -4,10 +4,6 @@ import java.time.LocalDateTime
 
 interface AccessTokenModelSpec {
     /**
-     * A unique identifier for access token
-     */
-    val id: String
-    /**
      * Represents the token that will be used as the authentication method
      */
     val token: String

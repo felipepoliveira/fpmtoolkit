@@ -4,10 +4,10 @@ interface AccessTokenDAOSpec {
     /**
      * Find an access token identified by its ID
      */
-    fun findById(tokenId: String): AccessTokenModelSpec?
+    fun findByToken(token: String): AccessTokenModelSpec?
 
     /**
-     * Persist a access token
+     * Persist an access token
      */
     fun persist(token: AccessTokenModelSpec): AccessTokenModelSpec
 
