@@ -3,6 +3,7 @@ package io.felipepoliveira.fpmtoolkit.api.security.oauth
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.api.security.tokens.ApiAuthenticationTokenProvider
+import io.felipepoliveira.fpmtoolkit.commons.io.RandomString
 import io.felipepoliveira.fpmtoolkit.features.oauth.accessToken.AccessTokenModel
 import io.felipepoliveira.fpmtoolkit.features.oauth.authorizationCode.AuthorizationCodeModel
 import io.felipepoliveira.fpmtoolkit.features.oauth.refreshToken.RefreshTokenCache
@@ -40,7 +41,7 @@ class OAuthService @Autowired constructor(
     private val userConsentDAO: UserConsentDAO,
     private val userDAO: UserDAO,
     private val refreshTokenCache: RefreshTokenCache,
-) : OAuthServiceSpec(authorizationCodeDAO, clientDAO, refreshTokenCache, userConsentDAO) {
+) : OAuthServiceSpec(accessTokenDAOSpec, authorizationCodeDAO, clientDAO, refreshTokenCache, userConsentDAO) {
 
     override fun createAuthorizationCode(
         consent: UserConsentModelSpec,
@@ -48,7 +49,7 @@ class OAuthService @Autowired constructor(
     ): AuthorizationCodeModelSpec {
 
         val authorizationCode = AuthorizationCodeModel(
-            code = UUID.randomUUID().toString(),
+             code = RandomString.generate(RandomString.SEED_BASE62, 64),
             codeChallenge = params.codeChallenge,
             expiresAt = LocalDateTime.now().plusMinutes(2),
             codeChallengeMethod = params.codeChallengeMethod,
@@ -86,8 +87,6 @@ class OAuthService @Autowired constructor(
             )
         }
 
-        accessTokenDAOSpec.persist(accessToken)
-
         return accessToken
     }
 
@@ -114,8 +113,6 @@ class OAuthService @Autowired constructor(
             )
         }
 
-        accessTokenDAOSpec.persist(accessToken)
-
         return accessToken
     }
 
@@ -138,7 +135,7 @@ class OAuthService @Autowired constructor(
             )
         }
 
-        val refreshTokenId = UUID.randomUUID().toString()
+        val refreshTokenId = RandomString.generate(RandomString.SEED_BASE62, 64)
         val refreshToken = RefreshTokenModel(
             token = refreshTokenId,
             expiresAt = LocalDateTime.now().plusDays(30),
@@ -146,8 +143,6 @@ class OAuthService @Autowired constructor(
             clientId = authorizationCode.clientId,
             issuedAt = LocalDateTime.now()
         )
-
-        refreshTokenDAOSpec.persist(refreshToken)
 
         return refreshToken
 

@@ -4,6 +4,7 @@ import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.GeneratedToken
+import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeModelSpec
@@ -21,9 +22,9 @@ import io.felipepoliveira.fpmtoolkit.security.oauth.types.ValidatedAuthorizeRequ
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.LocalDateTime
-import javax.annotation.processing.Generated
 
 abstract class OAuthServiceSpec @Autowired constructor(
+    private val accessTokenDAO: AccessTokenDAOSpec,
     private val authorizationCodeDAO: AuthorizationCodeDAOSpec,
     private val clientDAO: ClientDAOSpec,
     private val refreshTokenDAO: RefreshTokenDAOSpec,
@@ -51,7 +52,7 @@ abstract class OAuthServiceSpec @Autowired constructor(
 
     abstract fun createRefreshToken(params: TokenRequestSpec, authorizationCode: AuthorizationCodeModelSpec): RefreshTokenModelSpec?
 
-    private fun createAuthorizationTokenGrant(params: TokenRequestSpec): GeneratedToken {
+    private fun createTokenFromAuthorizeCodeGrant(params: TokenRequestSpec): GeneratedToken {
         val code = params.code ?: throw BusinessRuleException(
             BusinessRulesError.INVALID_PARAMETERS,
             "'code' is required for grant ${params.grantType}"
@@ -82,6 +83,10 @@ abstract class OAuthServiceSpec @Autowired constructor(
         val accessToken = createAccessToken(authorizationCode)
         val refreshToken = createRefreshToken(params, authorizationCode)
 
+        accessTokenDAO.persist(accessToken)
+        if(refreshToken != null ) refreshTokenDAO.persist(refreshToken)
+
+
         val expiresInSeconds = Duration.between(LocalDateTime.now(), accessToken.expiresAt).seconds
         if (expiresInSeconds < 0) {
             throw Exception("Unexpected error: Provided access_token has an expiration date that is already expired")
@@ -99,7 +104,7 @@ abstract class OAuthServiceSpec @Autowired constructor(
         )
     }
 
-    private fun createRefreshTokenGrant(params: TokenRequestSpec): GeneratedToken {
+    private fun createTokenFromRefreshTokenGrant(params: TokenRequestSpec): GeneratedToken {
         val refreshTokenFromReq = params.refreshToken ?: throw BusinessRuleException(
             BusinessRulesError.INVALID_PARAMETERS,
             "'refresh_token' is required on grant ${params.grantType}"
@@ -114,7 +119,9 @@ abstract class OAuthServiceSpec @Autowired constructor(
             BusinessRulesError.INVALID_PARAMETERS,
             "user has removed consent for client"
         )
+
         val accessToken = createAccessToken(refreshTokenPayload)
+        accessTokenDAO.persist(accessToken)
 
         val expiresInSeconds = Duration.between(LocalDateTime.now(), accessToken.expiresAt).seconds
         if (expiresInSeconds < 0) {
@@ -133,10 +140,10 @@ abstract class OAuthServiceSpec @Autowired constructor(
     fun createToken(params: TokenRequestSpec): GeneratedToken {
         return when (params.grantType) {
             "authorization_code" -> {
-                createAuthorizationTokenGrant(params)
+                createTokenFromAuthorizeCodeGrant(params)
             }
             "refresh_token" -> {
-                createRefreshTokenGrant(params)
+                createTokenFromRefreshTokenGrant(params)
             }
             else -> {
                 throw BusinessRuleException(

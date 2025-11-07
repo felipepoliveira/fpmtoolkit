@@ -85,7 +85,7 @@ class ApiAuthenticationTokenProvider(
             .withIssuedAt(issuedAt)
             .withExpiresAt(expiresAt)
             .withClaim(CLAIM_CLIENT_IDENTIFIER, payload.clientIdentifier)
-            .withClaim(CLAIM_ORGANIZATION_IDENTIFIER, if (payload.organizationId != null) payload.organizationId.toString() else null)
+            .withClaim(CLAIM_ORGANIZATION_IDENTIFIER, payload.organizationId)
             .withClaim(CLAIM_USER_IDENTIFIER, payload.userIdentifier.toString())
             .withClaim(CLAIM_ROLES, payload.roles.asList())
             .sign(Algorithm.HMAC512(contextualBeans.authenticationTokenSecretKey()))

@@ -8,6 +8,8 @@ class RandomString {
         const val SEED_DIGITS = "0123456789"
         const val SEED_UPPER_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         const val SEED_LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz"
+        const val SEED_BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        const val SEED_BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
         fun generate(seed: String, amountOfChars: Int): String {
             if (amountOfChars < 1) {

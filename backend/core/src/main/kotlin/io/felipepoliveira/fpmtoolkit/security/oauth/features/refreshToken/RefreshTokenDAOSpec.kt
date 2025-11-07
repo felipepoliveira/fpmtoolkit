@@ -6,12 +6,12 @@ interface RefreshTokenDAOSpec {
     /**
      * Find an access token identified by its ID
      */
-    fun findByToken(token: String): RefreshTokenModel?
+    fun findByToken(token: String): RefreshTokenModelSpec?
 
-    fun persist(token: RefreshTokenModel): RefreshTokenModel
+    fun persist(token: RefreshTokenModelSpec): RefreshTokenModelSpec
 
     /**
      * Revoke a AccessTokenModel
      */
-    fun revoke(token: RefreshTokenModel): RefreshTokenModel
+    fun revoke(token: RefreshTokenModelSpec): RefreshTokenModelSpec
 }
