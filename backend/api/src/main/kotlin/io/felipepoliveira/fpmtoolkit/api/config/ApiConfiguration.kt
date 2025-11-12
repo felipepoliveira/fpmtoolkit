@@ -50,7 +50,9 @@ class ApiConfiguration {
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/api/*/public/**").permitAll()
+                    .requestMatchers("/mcp/**").permitAll()
                     .requestMatchers("/oauth/**").permitAll()
+                    .requestMatchers("/.well-known/**").permitAll()
                     .anyRequest().authenticated()
             }
             .exceptionHandling { eh ->

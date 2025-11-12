@@ -183,6 +183,9 @@ abstract class OAuthServiceSpec @Autowired constructor(
 
         val client = findClientById(authorizeRequest.clientId)
 
+        if (client.isDisabled)
+
+
         // The server can not have empty allowed redirect uri
         if (client.allowedRedirectUris.isEmpty()) {
             throw Exception(

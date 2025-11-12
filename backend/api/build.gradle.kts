@@ -35,6 +35,16 @@ dependencies {
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 
+    // Model Context Protocol: WebFlux Transports
+    // WebFlux implementation for the SSE and Streamable Http Client and Server transports
+    // https://mvnrepository.com/artifact/io.modelcontextprotocol.sdk/mcp-spring-webflux
+    implementation("io.modelcontextprotocol.sdk:mcp-spring-webflux:0.10.0")
+
+    // Spring AI Starter MCP Server
+    // Spring AI MCP Server Spring Boot Starter
+    // https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-server
+    implementation("org.springframework.ai:spring-ai-starter-mcp-server:1.0.3")
+
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
     implementation("org.springframework.boot:spring-boot-starter-web:3.4.2")
 
