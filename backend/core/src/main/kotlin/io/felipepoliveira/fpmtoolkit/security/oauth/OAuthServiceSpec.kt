@@ -2,8 +2,11 @@ package io.felipepoliveira.fpmtoolkit.security.oauth
 
 import io.felipepoliveira.fpmtoolkit.BusinessRuleException
 import io.felipepoliveira.fpmtoolkit.BusinessRulesError
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.features.dynamicClient.DynamicClientDAOSpec
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.features.dynamicClient.DynamicClientModelSpec
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.TokenRequestSpec
 import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.GeneratedToken
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.types.RegisterDynamicClientRequest
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenDAOSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.accessToken.AccessTokenModelSpec
 import io.felipepoliveira.fpmtoolkit.security.oauth.features.authorizationCode.AuthorizationCodeDAOSpec
@@ -27,6 +30,7 @@ abstract class OAuthServiceSpec @Autowired constructor(
     private val accessTokenDAO: AccessTokenDAOSpec,
     private val authorizationCodeDAO: AuthorizationCodeDAOSpec,
     private val clientDAO: ClientDAOSpec,
+    private val dynamicClientDAO: DynamicClientDAOSpec,
     private val refreshTokenDAO: RefreshTokenDAOSpec,
     private val userConsentDAO: UserConsentDAOSpec,
 ) {
@@ -49,6 +53,8 @@ abstract class OAuthServiceSpec @Autowired constructor(
     abstract fun createAccessToken(authorizationCode: AuthorizationCodeModelSpec): AccessTokenModelSpec
 
     abstract fun createAccessToken(refreshToken: RefreshTokenModelSpec): AccessTokenModelSpec
+
+    abstract fun createDynamicClient(reqData: RegisterDynamicClientRequest): DynamicClientModelSpec
 
     abstract fun createRefreshToken(params: TokenRequestSpec, authorizationCode: AuthorizationCodeModelSpec): RefreshTokenModelSpec?
 
@@ -154,6 +160,21 @@ abstract class OAuthServiceSpec @Autowired constructor(
         }
     }
 
+    fun registerDynamicClient(reqData: RegisterDynamicClientRequest): DynamicClientModelSpec {
+
+        // evaluate redirect_uri validity
+        if (reqData.redirectUris.isEmpty()) {
+            throw BusinessRuleException(
+                BusinessRulesError.INVALID_PARAMETERS,
+                "redirect_uris can not be null or empty"
+            )
+        }
+
+        val client = createDynamicClient(reqData)
+        dynamicClientDAO.persist(client)
+
+        return client
+    }
 
     /**
      * Check if a given user has given consent to the given client with the given parameters
@@ -182,8 +203,6 @@ abstract class OAuthServiceSpec @Autowired constructor(
         }
 
         val client = findClientById(authorizeRequest.clientId)
-
-        if (client.isDisabled)
 
 
         // The server can not have empty allowed redirect uri

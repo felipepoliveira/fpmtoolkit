@@ -8,6 +8,7 @@ import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyAp
 import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationModel
 import io.felipepoliveira.fpmtoolkit.features.thirdPartyApplication.ThirdPartyApplicationService
 import io.felipepoliveira.fpmtoolkit.features.users.UserService
+import io.felipepoliveira.fpmtoolkit.io.felipepoliveira.fpmtoolkit.security.oauth.features.dynamicClient.DynamicClientDAOSpec
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cglib.core.Local
@@ -19,6 +20,7 @@ import java.time.LocalDateTime
 class UserConsentService @Autowired constructor(
     private val userConsentDAO: UserConsentDAO,
     private val userService: UserService,
+    private val dynamicClientDAO: DynamicClientDAOSpec,
     private val thirdPartyApplicationDAO: ThirdPartyApplicationDAO,
     private val thirdPartyApplicationService: ThirdPartyApplicationService,
     smartValidator: SmartValidator
@@ -35,16 +37,33 @@ class UserConsentService @Autowired constructor(
     }
 
     @Transactional
+    fun createThirdPartyAppFromDynamicClient(clientId: String): ThirdPartyApplicationModel {
+        // fetch the dynamic registered client from the database
+        val dynamicRegisteredClient = dynamicClientDAO.findByClientId(clientId) ?: throw BusinessRuleException(
+            BusinessRulesError.INVALID_PARAMETERS,
+            "Could not identify registered client or dynamic client identified by 'client_id'"
+        )
+
+        // convert the dynamic client data to third party app so it can be included in the database
+        val client = dynamicRegisteredClient.toClient() as ThirdPartyApplicationModel
+        thirdPartyApplicationDAO.persist(client)
+
+        // remove the dynamic client from its repository
+        dynamicClientDAO.remove(dynamicRegisteredClient)
+
+        return client
+    }
+
+    @Transactional
     fun registerConsent(requesterUuid: String, thirdPartyAppId : String): UserConsentModel {
 
         // fetch requester account
         val requester = userService.assertFindByUuid(requesterUuid)
 
         // fetch and validate third party from database
-        val thirdPartyApp = thirdPartyApplicationDAO.findById(thirdPartyAppId) as ThirdPartyApplicationModel? ?: throw BusinessRuleException(
-            BusinessRulesError.NOT_FOUND,
-            "Could not find third party app identified by $thirdPartyAppId"
-        )
+        val thirdPartyApp = thirdPartyApplicationDAO.findById(thirdPartyAppId) as ThirdPartyApplicationModel?
+            ?:
+            createThirdPartyAppFromDynamicClient(thirdPartyAppId)
 
         // check if user has already consented with the app
         val consent = userConsentDAO.findConsent(requester, thirdPartyApp) as UserConsentModel?

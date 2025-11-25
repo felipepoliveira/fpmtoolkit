@@ -53,4 +53,5 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-authorization-server
     implementation("org.springframework.security:spring-security-oauth2-authorization-server:1.5.3")
+
 }
